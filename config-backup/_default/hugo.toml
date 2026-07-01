@@ -1,0 +1,26 @@
+baseURL = "https://blog.noahanna.online/"
+title = "男娘教主"
+theme = "hugo-theme-stack"
+defaultContentLanguage = "zh"
+hasCJKLanguage = true
+locale = "zh-cn"
+paginate = 10
+
+[outputs]
+    home = ["HTML", "RSS", "JSON"]
+
+[imaging]
+    resampleFilter = "box"
+    quality = 75
+    anchor = "smart"
+
+[services]
+    [services.disqus]
+        shortname = ""
+
+[params]
+    [params.logo]
+        logoText = "男娘教主"
+        logoHomeLink = "/"
+    [params.footer]
+        since = 2026
