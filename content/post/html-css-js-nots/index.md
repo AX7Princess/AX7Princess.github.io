@@ -48,4 +48,8 @@ image: ""
 <img src=“../image/a.png” width=“100” height=“100”/> 
 <!-- 结构是 属性名=”属性值” -->
 ```
-4. <head>用于
+4. <head>用于标识网页元数据，描述网页基本信息，主要包括<title><meta>
+```
+<meta charset="UTF-8"> 
+```
+用于设置字符编码
