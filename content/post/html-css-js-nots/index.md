@@ -93,20 +93,49 @@ value 输入框默认值
 placeholder 提示信息，当有值时就会消失，浅灰色的提示文字
 checked="cheked" 默认选中
 
-3. text 文本框
-
-默认宽度为20个字符
-
-4. password 密码输入框
-
-5. radio 单选按钮
-```
+**其他type**
+-  text 文本框，默认宽度为20个字符
+- password 密码输入框
+- radio 单选按钮
+   ```
 <form action="form.php" method="post"> 
 <input type="radio" name="sex" value="男" checked="checked" />男 
 <input type="radio" name="sex" value="女" />女 
 </form>
 ```
-6. 
+- checkbox复选框
+
+-  file 上传文件按钮
+- submit提交按钮，当没有value值时，submit 按钮中默认显示的文字为“提交”
+- reset 重置表单为初始状态
+- button 单机按钮
+    ```
+      <form action="form.php" method="post"> 
+      <input type="button" value="点我！"  onclick="alert('这是一个按钮！')" /> 
+      </form>
+     ```
+3. select 下拉选择
+```
+<form action="form.php" method="post"> 
+ <select name="week"> 
+  <option value="1">1</option> 
+  <option value="2">2</option> 
+  <option value="3">3</option> 
+  <option value="4">4</option> 
+  <option value="5">5</option> 
+  <option value="6">6</option> 
+  <option value="7">7</option> 
+ </select> 
+</form> 
+```
+4. textarea 文本域
+readonly="readonly" 只读
+
+5. button按钮
+
+
+
+
 
 
 
