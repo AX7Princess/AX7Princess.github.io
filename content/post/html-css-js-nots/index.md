@@ -78,6 +78,36 @@ href属性：标识图片地址
 <ol><li></li></ol>有序列表标签 
 <div></div>分区标签 ，将文档分割为独立的、不同的部分
 
+## 三、表单
+表单用于用户填写数据源并交给服务器出来，像qq登录页就是表单。
+
+**表单由<form></form>包裹
+1. 常见属性有
+action用于指定给谁提交数据，即发送服务器的地址
+method用于像服务器提交数据的方法，get或post
+
+2.input输入框属性
+type 默认是text
+name 标识输入框名称，一般必填，传递数据时使用```name=value```的形式传递
+value 输入框默认值
+placeholder 提示信息，当有值时就会消失，浅灰色的提示文字
+checked="cheked" 默认选中
+
+3. text 文本框
+
+默认宽度为20个字符
+
+4. password 密码输入框
+
+5. radio 单选按钮
+```
+<form action="form.php" method="post"> 
+<input type="radio" name="sex" value="男" checked="checked" />男 
+<input type="radio" name="sex" value="女" />女 
+</form>
+```
+6. 
+
 
 
 
