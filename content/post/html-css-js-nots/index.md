@@ -14,6 +14,8 @@ image: ""
 ---
 
 ## Html5笔记
+
+### 一、基础框架
 1. 文件以<DOCTYPE html开头>
 基本结构为
 ```
@@ -53,3 +55,22 @@ image: ""
 <meta charset="UTF-8"> 
 ```
 用于设置字符编码
+
+name属性，将信息写给搜索引擎看，常用属性值有，author，keywords，description，
+```<meta name="viewport" ...>```
+用于适配手机，否则手机看到字很小
+
+5. <link>标签 加载一个图片作为网页图标
+re属性：声明被链接文件和当前文件关系，这里选icon
+type属性：声明类型
+href属性：标识图片地址
+```
+<link rel="icon" type="image/x-icon" href="img/icon.jpg" />
+```
+### 二、常用块标签
+1. 
+<h1></h1>...<h6></h6>标题
+<hr/>水平线
+<p></p>段落标签
+<br/>换行
+
