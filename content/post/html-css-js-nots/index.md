@@ -173,11 +173,39 @@ color:red;
 ```
 ### 三、Javascript
 
+js使用也是三种方式，内嵌式，页面中使用和引入外部文件
+内嵌式
+```
+<button onclick="JavaScript:alert('Hello JavaScript！')">点我</button> 
+```
+在页面中使用
+```
+<script type="text/javascript"> 
+// JavaScript 代码 
+</script>
 
+```
+外部引入
+```
+<script language="JavaScript" src=" JavaScript 文件路径"></script>   
+```
 
+1. 变量
+js共有6种基本数据类型，不需要声明数据类型，同意使用var关键字声明，不适用var则默认为全局变量。
 
+声明基本规范，变量名只能由字母、数字、下画线、$ 组成，且开头不能是数字。
+变量区分大小写
 
+空引用，Null式一种特殊数据类型，同时作为关键字不区分大小写，NULL，Null，null均是合法的
 
+**布尔类型**
+**Number**数值，不区分整数小数类型，统一用数值代替
+**String**字符串
+**Object** 对象类型
+2. 数据类型转换
+
+转换为str转换为num，使用
+xingNumber("111");
 
 
 
