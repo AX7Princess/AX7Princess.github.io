@@ -134,6 +134,50 @@ readonly="readonly" 只读
 5. button按钮
 
 
+### 二、CSS基础
+css由选择器及一条或多条声明，基本语法如下：
+```
+选择器{ 
+属性:属性值;     
+[属性:属性值; …] 
+} 
+```
+CSS添加注释的方式为/*……*/
+
+行内样式表，即将css代码写在HTML代码内部，作为标签的属性
+```
+<a href="#" style="color:red;font-size:10px;">日用百货</a>
+```
+内嵌式则是将css代码内嵌到HTML代码中，通常放在head标签内部
+```
+<head> 
+<!--charset="UTF-8"表示当前文档采用字符集中utf-8,支持中文--> 
+<meta charset="UTF-8"> 
+<title>内部样式表</title> 
+<!--内部样式表 代码要放置在style标签内--> 
+<style type="text/css"> 
+div{ 
+color:red; 
+} 
+</style> 
+</head>
+```
+
+外联式也是最推荐的，方便维护，各部分代码分离
+```
+<head> 
+<meta charset="UTF-8"> 
+<title>外部样式表</title> 
+<link rel="stylesheet" type="text/css" href="css/ch05.css" />  
+</head>
+```
+### 三、Javascript
+
+
+
+
+
+
 
 
 
