@@ -1,7 +1,7 @@
 ---
 description: ""
 title: "Git学习笔记"
-draft: true
+draft: false
 date: "2026-07-03T07:50:31+08:00"
 slug: "git note"
 categories:
