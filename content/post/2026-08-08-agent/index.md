@@ -51,3 +51,8 @@ Prompt三个硬指标：
 
 CoT 和 Few-shot 不是固定的角色位置，而是 prompt 技巧：CoT 是一条'要求一步步推理'的指令，可放 system 当规则或 user 当任务；Few-shot 是穿插在历史里的 user/assistant 问答对，让模型模仿格式。它们必须用代码实现，是因为 API 只接收带 role 的 messages 结构——文字是 content，代码是组装，两者结合才能复用。
 
+多轮对话练习代码
+`
+
+`
+
