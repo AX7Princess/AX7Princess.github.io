@@ -12,7 +12,8 @@ image: ""
 ---
 
 ## 流式接收代码结构
-`from openai import OpenAI
+```
+from openai import OpenAI
 client =OpenAI(api_key="",base_url="https://api.deepseek.com")
 message=[{"role":"user","content":"你是哪个大模型"}]
 response=client.chat.completions.create(model="deepseek-v4-flash",messages=message,stream=True,reasoning_effort="low",extra_body={"thinking":{"type":"enabled"}},)
@@ -25,7 +26,9 @@ for chunk in response:
     if chunk.choices[0].delta.content: 
         content +=chunk.choices[0].delta.content
 print("Reasoning Content:", reasoning_content)
-print("Content:", content)`
+print("Content:", content)
+
+```
 
 Chunk 就是"模型把一句话拆成一截一截，一截一截往外吐"里的那一截。 每次吐出来的那一小块，就叫一个 chunk
 ## 流式解析里的经典坑
