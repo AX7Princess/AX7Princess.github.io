@@ -40,3 +40,14 @@ stream=True 时，模型一截截吐 chunk，不是每个 chunk 都带文字,典
 思考阶段  只有 reasoning_content（草稿纸），content 是空
 
 流快结束  收尾 chunk 只带 finish_reason，content 是 None
+
+##  choices 为什么是数组？ 因为 OpenAI 系 SDK 支持一个请求同时生成多个候选答案（参数 n=2 就是让它给两份不同回答）。每个候选是列表里的一项。但你日常流式场景只有一个候选，所以永远取第 0 个 → choices[0]
+
+## 剥到 choices[0] 之后，里面那个 delta 才是真正装着文字的地方。delta 的英文原意就是"增量"——它不是完整答案，而是这一截新长出来的那一小块。
+
+delta.content 正式回答的文字增量 
+
+delta.reasoning_content 思考过程的文字增量
+
+delta.role 角色标记（只在第一截出现）
+
