@@ -51,3 +51,10 @@ delta.reasoning_content 思考过程的文字增量
 
 delta.role 角色标记（只在第一截出现）
 
+##  messages 里三种角色各管什么
+
+"system" 规则制定者（你设定的人设/规则）
+
+"user"  用户说的话
+
+"assistant"   模型之前说过的话
