@@ -34,3 +34,6 @@ for chunk in response:
 
 print("思考过程:", reasoning_content)
 print("最终回答:", content)`
+
+Chunk 就是"模型把一句话拆成一截一截，一截一截往外吐"里的那一截。 每次吐出来的那一小块，就叫一个 chunk
+
