@@ -107,7 +107,50 @@ f"可用工具:{tools}。请严格按格式回答:\n"
 
 ToT 的实现核心是三步循环：发散（生成多条路径）→ 评估（打分）→ 收敛（选最优）。工程上两种做法：单 prompt 版让模型一口气走完三步、成本低；真 ToT 分三次调用 API、每步可控可干预，代价是 3 倍调用。选型看任务——快速出方案用单 prompt，关键决策用多轮循环
 
+```
+from openai import OpenAI
+import os
 
+client = OpenAI(api_key=os.getenv("DEEPSEEK_API_KEY"), base_url="https://api.deepseek.com")
+
+def get_response(messages, **kwargs):
+    response = client.chat.completions.create(
+        model="deepseek-v4-flash",
+        messages=messages,
+        stream=True,
+        reasoning_effort="low",
+        extra_body={"thinking": {"type": "enabled"}},
+        max_tokens=kwargs.get("max_tokens", 500),
+    )
+    reasoning_content, content = "", ""
+    for chunk in response:
+        delta = chunk.choices[0].delta
+        if delta.reasoning_content:
+            reasoning_content += delta.reasoning_content
+        if delta.content:
+            content += delta.content
+    if content:
+        messages.append({"role": "assistant", "content": content})
+    else:
+        content = reasoning_content
+    return content
+def tot_prompt(system_prompt,question,n=3):
+    u=(f"请针对以下问题，提供{n}个不同的解决方案，"
+       f"然后逐步分析每个解决方案的优缺点，最后给出最优方案。"
+       f"最后选出最佳方案并说明理由。\n\n问题：{question}")
+    return [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": u}
+    ]
+while True:
+    user_input = input("User: ")
+    if user_input.lower() in ["exit", "quit"]:
+        break
+    msgs = tot_prompt("你是资深的Agent架构师，擅长多种角度对比方案", user_input)
+    response = get_response(msgs, max_tokens=1000)
+    print("Agent导师:", response)
+
+```
 
 
 
