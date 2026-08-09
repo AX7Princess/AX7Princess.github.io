@@ -1,7 +1,7 @@
 ---
 description: ""
 title: "Prompt"
-draft: false
+draft: true
 date: "2026-08-08T02:58:24+08:00"
 slug: "Agent"
 categories:
@@ -82,3 +82,85 @@ while True:
 if __name__ == "__main__": 
     pass
 ```
+## Recat
+
+ReAct = 边思考边行动（Thought → Action → Observation → Answer），是 Agent 的前身。
+ReAct = Reason + Act（边思考边行动），模型不闷头答，而是"想一步 → 做一步 → 看结果 → 再想下一步"，像人一样边动脑子边动手 
+
+```
+Thought: 我先想清楚要做什么
+Action: 调哪个工具
+Action Input: 传什么参数
+Observation: 工具返回了什么
+Answer: 最终答案
+
+---------------------------------------------------------------------
+
+f"可用工具:{tools}。请严格按格式回答:\n"
+         f"Thought: 我先想清楚要做什么\n"
+         f"Action: 调哪个工具\n"
+         f"Action Input: 参数\n"
+         f"Observation: (工具返回,此处先占位)\n"
+         f"Answer: 最终答案\n\n问题:{question}")
+```
+## ToT
+
+ToT 的实现核心是三步循环：发散（生成多条路径）→ 评估（打分）→ 收敛（选最优）。工程上两种做法：单 prompt 版让模型一口气走完三步、成本低；真 ToT 分三次调用 API、每步可控可干预，代价是 3 倍调用。选型看任务——快速出方案用单 prompt，关键决策用多轮循环
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
