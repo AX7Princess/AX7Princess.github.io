@@ -107,6 +107,7 @@ f"可用工具:{tools}。请严格按格式回答:\n"
 
 ToT 的实现核心是三步循环：发散（生成多条路径）→ 评估（打分）→ 收敛（选最优）。工程上两种做法：单 prompt 版让模型一口气走完三步、成本低；真 ToT 分三次调用 API、每步可控可干预，代价是 3 倍调用。选型看任务——快速出方案用单 prompt，关键决策用多轮循环
 
+单词调用
 ```
 from openai import OpenAI
 import os
@@ -152,6 +153,71 @@ while True:
 
 ```
 
+多轮循环调用
+
+```
+from openai import OpenAI
+import os
+
+client = OpenAI(api_key=os.getenv("DEEPSEEK_API_KEY"), base_url="https://api.deepseek.com")
+
+def get_response(messages, **kwargs):
+    response = client.chat.completions.create(
+        model="deepseek-v4-flash",
+        messages=messages,
+        stream=True,
+        reasoning_effort="low",
+        extra_body={"thinking": {"type": "enabled"}},
+        max_tokens=kwargs.get("max_tokens", 500),
+    )
+    reasoning_content, content = "", ""
+    for chunk in response:
+        delta = chunk.choices[0].delta
+        if delta.reasoning_content:
+            reasoning_content += delta.reasoning_content
+        if delta.content:
+            content += delta.content
+    if content:
+        messages.append({"role": "assistant", "content": content})
+    else:
+        content = reasoning_content
+    return content
+def ask(quextion,system_prompt="你是擅长多种角度对比方案的资深Agent架构师",max_tokens=500):
+    msgs=[
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": quextion}
+    ]
+    response = get_response(msgs, max_tokens=max_tokens)
+    return response
+def tot_solve(question,n=3):
+    schemes=ask(
+        f"请针对以下问题给出{n}种不同解决思路，编号列出：\n{question}\n",
+        system_prompt="你是擅长发散思维的规划专家",
+        max_tokens=600,
+    )
+    scores = ask(
+        f"请对以下 {n} 个方案逐一打分(1-10分),并各用一句话说明理由:\n{schemes}",
+        system_prompt="你是严格的评审专家,打分要客观",
+        max_tokens=500,
+    )
+    best = ask(
+        f"综合以下评分,选出最优方案,并给出具体实施步骤:\n{scores}",
+        system_prompt="你是决策专家,直接给最终选择",
+        max_tokens=600,
+    )
+    return schemes, scores, best
+while True:
+    user_input = input("User: ")
+    if user_input.lower() in ["exit", "quit"]:
+        break
+    s1, s2, s3 = tot_solve(user_input)
+    #response = get_response(msgs, max_tokens=1000)
+    print("方案:", s1)
+    print("评审:", s2)
+    print("决策:", s3)
+
+```
+***ToT 输出量大、最容易触 token 上限；判断信号是"结尾突兀/结构缺块/数量不足"；对策是给足 token、拆多轮循环、约束格式。你这次结果结构完整、没有截断***
 
 
 
