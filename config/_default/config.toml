@@ -4,7 +4,7 @@ title = "男娘教主"
 theme = "hugo-theme-stack"
 locale = "zh-cn"
 defaultContentLanguage = "zh"
-hasCJKLanguage = false
+hasCJKLanguage = true
 paginate = 10
 
 [outputs]

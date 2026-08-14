@@ -26,10 +26,29 @@ SortBy              = "default"
     headingAnchor = false
     math          = false
     readingTime   = true
+    toc           = true
+
+    [article.list]
+        showTags = false
 
     [article.license]
         enabled = true
         default = "Licensed under CC BY-NC-SA 4.0"
+
+    [article.mermaid]
+        look = "classic"
+        lightTheme = "default"
+        darkTheme = "dark"
+        securityLevel = "strict"
+        htmlLabels = true
+        transparentBackground = false
+
+    [article.alertIcon]
+        note = "📝"
+        tip = "💡"
+        important = "📌"
+        warning = "⚠️"
+        caution = "🚨"
 
 [widgets]
     homepage = [
@@ -50,8 +69,22 @@ SortBy              = "default"
 
 ## Comments
 [comments]
-    enabled  = true
+    enabled  = false
     provider = "disqus"
 
     # See all the available configurations at https://github.com/CaiJimmy/hugo-theme-stack/blob/master/config/_default/params.toml
     # Copy the configurations you need from there and paste it here.
+
+# ---- 补充的常用参数（主题默认未写）----
+[imageProcessing]
+    autoOrient = false
+
+    [imageProcessing.external]
+        timeout = "5s"
+
+    [imageProcessing.content]
+        widths  = [800, 1600, 2400]
+        enabled = true
+
+    [imageProcessing.thumbnail]
+        enabled = true

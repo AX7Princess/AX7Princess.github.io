@@ -1,17 +1,40 @@
 # Configure main menu and social menu
-#[[main]]
-#identifier = "home"
-#name = "Home"
-#url = "/"
-#[main.params]
-#icon = "home"
-#newtab = true
+[[main]]
+    identifier = "home"
+    name       = "Home"
+    url        = "/"
+    weight     = 1
+    [main.params]
+        icon = "home"
+
+[[main]]
+    identifier = "archives"
+    name       = "Archives"
+    url        = "/archives/"
+    weight     = 2
+    [main.params]
+        icon = "archives"
+
+[[main]]
+    identifier = "links"
+    name       = "Links"
+    url        = "/links/"
+    weight     = 3
+    [main.params]
+        icon = "link"
+
+[[main]]
+    identifier = "search"
+    name       = "Search"
+    url        = "/search/"
+    weight     = 4
+    [main.params]
+        icon = "search"
 
 [[social]]
-    identifier = "BiliBili"
-    name       = "BiliBili"
-    url        = "https://space.bilibili.com/309540226"
-
+    identifier = "github"
+    name       = "GitHub"
+    url        = "https://github.com/Seraphlet"
     [social.params]
         icon = "brand-github"
 
@@ -19,6 +42,5 @@
     identifier = "twitter"
     name       = "Twitter"
     url        = "https://twitter.com"
-
     [social.params]
         icon = "brand-twitter"
