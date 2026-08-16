@@ -96,6 +96,14 @@ git add 可以用来开始追踪新文件、暂存文件、以及其他功能。
 #### 显示 Git 存储的短名 URL，用于读取和写入该远程设备时：-v
 git remote -v
 #### 删除文件
+#### 别名
+```
+例：
+git config --global alias.co checkout
+git config --global alias.br branch
+git config --global alias.ci commit
+ git config --global alias.st status
+```
 
 ### 推送和拉取
 
