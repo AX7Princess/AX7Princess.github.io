@@ -11,101 +11,280 @@ tags:
 image: ""
 ---
 
-### 安装Git
-[参考文档](https://git-scm.cn/learn)
+# Git 命令指南
+## 目录
+- [一、配置与初始化](#一配置与初始化)
+- [二、日常提交四步曲](#二日常提交四步曲)
+- [三、查看状态与差异](#三查看状态与差异)
+- [四、分支管理](#四分支管理)
+- [五、远程协作](#五远程协作)
+- [六、暂存与恢复（stash）](#六暂存与恢复stash)
+- [七、撤销与回退](#七撤销与回退)
+- [八、标签](#八标签)
+- [九、实用技巧](#九实用技巧)
+- [十、常见工作流示例](#十常见工作流示例)
+- [小结](#小结)
 
-安装无脑下一步就可以，安装完成后就可以去终端查看是否安装成功
+---
+
+## 一、配置与初始化
+
+### `git config` —— 配置用户信息
+```bash
+git config --global user.name "你的名字"
+git config --global user.email "you@example.com"
 ```
-git --version
-```
-当然也有 help和list等常用指令
+`--global` 对当前用户所有仓库生效；去掉该参数则只对当前仓库生效。第一次提交前必须配置，否则会报错。
 
-#### 初次运行Git前的配置
-
-#### 设置身份
-
-安装完 Git 后，首先要做的事情是设置你的用户名和邮件地址。就是告诉Git你是谁。
-```
-git config --global user.name "John Doe"
-git config --global user.email johndoe@example.com
-```
-更改编辑器，可选，如果喜欢用其他的编辑器的话
-```
-git config --global core.editor emacs
-```
-windows系统则需要使用完整编辑器(exe文件)路径地址
-
-
-### Git基础
-
-#### 获取git
-1. 将本地某个文件或文件夹创建为git仓库
-2. 从其他地方克隆一个现有的git仓库
-
-**在现有目录初始化**
-
-首先需要cd进入项目目录下，然后输入
-```
+### `git init` —— 初始化仓库
+```bash
 git init
 ```
-这会创建一个名为 .git 的新子目录，其中包含你所有必要的仓库文件——一个 Git 仓库骨架。
+在当前目录创建 `.git` 子目录，把它变成一个 Git 仓库。
 
-##### 更改默认分支
-当你使用 git init 创建新仓库时，Git 会创建一个名为 master 的分支。
-git init的作用是在当前文件夹内生成一个.git隐藏文件，里面包含所有版本控制元数据。
-
-将main设置为默认分支
+### `git clone` —— 克隆远程仓库
+```bash
+git clone https://github.com/user/repo.git
+git clone https://github.com/user/repo.git my-folder   # 克隆到指定目录
 ```
-git config --global init.defaultBranch main
-```
-**查看所有配置**
-```
-git config --list
-```
+把远程仓库完整下载到本地，并自动建立名为 `origin` 的远程关联。
 
-#### 克隆现有仓库
-你使用 ```git clone <url>``` 来克隆仓库。
+---
 
-#### 记录仓库中的更改
+## 二、日常提交四步曲
 
-工作目录中的每个文件要么处于已跟踪状态，要么处于未跟踪状态。已跟踪的文件是指那些被包含在上一次快照中的文件，以及任何新暂存的文件；它们可以是未修改、已修改或已暂存状态。简而言之，已跟踪文件就是 Git 知道的文件。
+Git 的核心工作流是：**修改文件 → 暂存 → 提交 → 推送**（可选）。
 
-未跟踪的文件是指除此之外的所有文件——即工作目录中那些既不在上一次快照中，也不在暂存区中的文件。当你首次克隆一个仓库时，所有的文件都将是已跟踪且未修改的，因为 Git 刚刚将它们检出，而你尚未编辑任何内容。
-
-**检查文件状态**
-
-```
+### `git status` —— 查看当前状态
+```bash
 git status
 ```
-git add 可以用来开始追踪新文件、暂存文件、以及其他功能。
+显示哪些文件被修改、哪些已暂存、哪些未跟踪。最常用的"我当前在哪"命令。
 
-如```git add README```
-
-####  查看提交历史 
-
-  ```git log```
-
-#### 提交更改
-
-任何尚未暂存的内容——即创建或修改了但自编辑以来尚未运行 git add 的任何文件——都不会进入本次提交。它们将作为已修改的文件保留在你的磁盘上。
-
-```git commit -a "更新说明"
-   git commit --amend  撤销
-``` 
-
-#### 显示 Git 存储的短名 URL，用于读取和写入该远程设备时：-v
-git remote -v
-#### 删除文件
-#### 别名
+### `git add` —— 暂存改动
+```bash
+git add file.py          # 暂存单个文件
+git add .                # 暂存当前目录所有改动（新增/修改/删除，受 .gitignore 约束）
+git add -A               # 暂存整个工作树所有改动
+git add -p               # 交互式暂存，按代码块选择
 ```
-例：
+`add` 只是把改动放进"暂存区"，还没有真正提交。
+
+### `git commit` —— 提交
+```bash
+git commit -m "feat: 新增登录功能"
+git commit -am "fix: 修复空指针"   # 自动暂存已跟踪文件的修改并提交
+```
+把暂存区的内容生成一个永久快照（commit）。
+
+### `git push` —— 推送到远程
+```bash
+git push origin main
+git push -u origin main   # 首次推送并关联上游，之后直接 git push
+```
+把本地提交上传到远程仓库。`-u` 会记下"上游分支"，以后 `git push` / `git pull` 无需再写参数。
+
+---
+
+## 三、查看状态与差异
+
+### `git diff` —— 查看差异
+```bash
+git diff              # 工作区 vs 暂存区
+git diff --staged     # 暂存区 vs 最近一次提交
+git diff main backup  # 两个分支之间的差异
+```
+
+### `git log` —— 查看提交历史
+```bash
+git log
+git log --oneline        # 一行一条，简洁
+git log --oneline -5     # 最近 5 条
+git log --graph --all    # 图形化展示分支关系
+```
+
+### `git show` —— 查看某次提交详情
+```bash
+git show <commit-id>
+```
+
+### `git blame` —— 逐行追溯
+```bash
+git blame file.py
+```
+显示每行代码最后是谁、在哪个提交改的，排查"这段代码谁写的"神器。
+
+---
+
+## 四、分支管理
+
+### `git branch` —— 分支操作
+```bash
+git branch              # 列出本地分支
+git branch feature      # 新建分支
+git branch -d feature   # 删除已合并的分支
+git branch -D feature   # 强制删除（未合并也删）
+```
+
+### `git switch` / `git checkout` —— 切换分支
+```bash
+git switch main              # 切到 main
+git switch -c feature        # 新建并切换到 feature
+git checkout main            # 老写法，等价 switch
+```
+`switch` 是 Git 2.23+ 推荐的新命令，语义比 `checkout`（身兼数职）更清晰。
+
+### `git merge` —— 合并分支
+```bash
+git switch main
+git merge feature     # 把 feature 合并进当前分支
+```
+可能产生冲突，需手动解决后再 `git add` + `git commit`。
+
+### `git rebase` —— 变基
+```bash
+git switch feature
+git rebase main      # 把 feature 的提交"挪到" main 最新提交之后
+```
+让提交历史变成一条直线，比 merge 更整洁。但**不要对已经推送到远程的提交做 rebase**，否则会���写共享历史，给协作者制造麻烦。
+
+---
+
+## 五、远程协作
+
+### `git remote` —— 管理远程仓库
+```bash
+git remote -v                         # 查看已关联的远程
+git remote add backup <url>          # 添加第二个远程
+git remote remove backup             # 删除远程
+```
+一个本地仓库可以连接多个远程（例如 `origin` 指向主仓库，`backup` 指向你的备份仓库）。
+
+### `git fetch` —— 拉取但不合并
+```bash
+git fetch origin
+```
+把远程更新下载到本地，但不动你的工作区。先 fetch 再查看，比直接 pull 更安全。
+
+### `git pull` —— 拉取并合并
+```bash
+git pull origin main
+git pull --rebase origin main   # 用 rebase 方式拉取，历史更干净
+```
+等于 `git fetch` + `git merge`。
+
+---
+
+## 六、暂存与恢复（stash）
+
+### `git stash` —— 临时存放改动
+```bash
+git stash              # 把未提交的改动藏起来
+git stash pop          # 恢复最近一次储藏并删除
+git stash list         # 查看所有储藏
+git stash apply        # 恢复但不删除
+```
+适合"活干到一半，却要切分支去修紧急 bug"的场景。
+
+---
+
+## 七、撤销与回退
+
+### `git restore` —— 丢弃工作区改动（Git 2.23+）
+```bash
+git restore file.py          # 撤销单个文件的工作区修改
+git restore --staged file.py # 把文件从暂存区移出（取消 add）
+```
+
+### `git reset` —— 重置
+```bash
+git reset --soft HEAD~1   # 回退到上一次提交，改动留在暂存区
+git reset --mixed HEAD~1  # 回退，改动留在工作区（默认行为）
+git reset --hard HEAD~1   # 彻底回退，丢弃所有改动（危险！）
+```
+`--hard` 会直接删除未提交的代码，**慎用**。
+
+### `git revert` —— 安全撤销（推荐用于已推送的提交）
+```bash
+git revert <commit-id>
+```
+生成一个"反向"的新提交来抵消某次提交，不改写历史，非常适合团队协作场景。
+
+---
+
+## 八、标签
+
+### `git tag` —— 打标签
+```bash
+git tag v1.0                          # 轻量标签
+git tag -a v1.0 -m "发布版本 1.0"     # 附注标签
+git push origin v1.0                  # 推送标签到远程
+```
+常用于标记发布版本。
+
+---
+
+## 九、实用技巧
+
+### `.gitignore` —— 忽略文件
+在项目根目录创建 `.gitignore`，写进去的文件不会进入版本控制：
+```gitignore
+.env            # 密钥/环境变量，禁止提交
+node_modules/
+__pycache__/
+*.log
+```
+避免把敏感信息（如 `.env` 里的数据库密码）或垃圾文件提交上去。
+
+### 一个 remote 推多个仓库
+```bash
+git remote set-url --add --push origin https://github.com/你的/AgentLearn.git
+```
+之后 `git push origin` 会同时推送到配置的所有 push 地址，适合 GitHub + Gitee 双备份。
+
+### 设置别名
+```bash
+git config --global alias.st status
 git config --global alias.co checkout
-git config --global alias.br branch
-git config --global alias.ci commit
- git config --global alias.st status
+git config --global alias.lg "log --oneline --graph"
+```
+之后用 `git st` 代替 `git status`，省时省力。
+
+---
+
+## 十、常见工作流示例
+
+### 日常提交
+```bash
+git status
+git add .
+git commit -m "feat: xxx"
+git push
 ```
 
-### 推送和拉取
+### Fork 协作
+```bash
+git clone https://github.com/你的/fork.git
+git remote add upstream https://github.com/原作者/repo.git
+git fetch upstream
+git merge upstream/main
+git push origin main
+```
 
-```git push```将commit提交的文件推动到github等
-```git pull```从github等拉取文件
+### 修 bug 临时切换
+```bash
+git stash
+git switch -c hotfix
+# 修复、提交……
+git switch main
+git merge hotfix
+git stash pop
+```
+
+---
+
+## 小结
+
+Git 命令看着多，其实日常 80% 的场景只用 `add` / `commit` / `push` / `pull` / `branch` / `merge` 这几个。先把它们用熟，剩下的 `rebase`、`stash`、`revert` 等按需查即可。建议把本文收藏，遇到忘记的命令随时翻。
+
+**记住一条铁律**：还没推送到远程的提交，可以用 `reset --hard` 删；已经推送出去的，请用 `revert` 安全撤销。
