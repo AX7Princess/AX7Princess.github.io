@@ -5,9 +5,9 @@ draft: false
 date: "2026-08-16T01:03:01+08:00"
 slug: "long-memory"
 categories:
- - 
+ - null
 tags:
- - 
+ - null
 image: ""
 ---
 
@@ -98,6 +98,22 @@ class LongTermMemory:
     def delete(self,fid:str):
         self.col.delete(ids=[fid])
 ```
+'''
+__file__：Python 内置变量，代表"当前这个文件自己的路径"（含文件名）
+
+比如 longmemory.py 在 C:\Desktop\AgentLearn\memory\longmemory.py，那 __file__ 就是整个这个字符串。
+
+Path(...)：把字符串"升级"成路径对象，才能用它做路径拼接、取上级目录等操作（而不是手动拼字符串）。
+
+.parent：取这个文件的"爸爸"（上一级目录）
+
+C:\Desktop\AgentLearn\memory\longmemory.py 的 parent = C:\Users\Think\Desktop\AgentLearn\memory\（去掉文件名，回到 memory 目录）
+
+合起来：BASE = Path(__file__).parent = "记下我这个代码文件所在的文件夹"。
+
+collection（集合） = Chroma 里的一个"货架/分档"，用来把不同类型的数据分开存
+
+collection="long_term" = 指定"我要用/建一个叫 long_term 的货架"
 ```
 import sqlite3, json
 from pathlib import Path
@@ -118,25 +134,3 @@ class ProfileStore:
 
     
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
