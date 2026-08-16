@@ -130,7 +130,8 @@ class ProfileStore:
 
     def get_profile(self,k):
         row=self.con.execute("SELECT v FROM profile WHERE k=?",(k,)).fetchone()
-        return json.loads(row[0]) if row else None
-
-    
+        return json.loads(row[0]) if row else None   
 ```
+原理:  长期记忆 = 把用户事实嵌入成向量 → 落盘到本地 → 查询时语义召回
+设计:  我用 LongTermMemory 类封装(add_fact 存 / recall 查),路径用 __file__ 钉死
+取舍:  确定事实用 SQLite KV,模糊历史用向量,两者互补
