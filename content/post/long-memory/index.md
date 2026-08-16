@@ -65,7 +65,9 @@ Chroma 会把这个数字指纹和原文一起写进你本地的 ./mem_store/ �
 
 向量库并没有"更高级"，它只是"换了一种查法"——用语义相似度代替精确 key。 你要存"用户叫什么"这种确定信息，SQLite/文件就够了；你要存"用户之前吐槽过什么"这种需要"意思接近就找到"的，才用向量库。两者配合才完整
 
-
+add_fact = RAG 里的"写入/索引"（chunk + embed + store）
+recall = RAG 里的"检索"（query embed + similarity search）
+PersistentClient(path=...) = 让向量库落到磁盘，不是内存版
 
 
 
