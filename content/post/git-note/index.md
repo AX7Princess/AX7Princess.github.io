@@ -1,7 +1,7 @@
 ---
 description: ""
 title: "Git学习笔记"
-draft: false
+draft: true
 date: "2026-07-03T07:50:31+08:00"
 slug: "git note"
 categories:
@@ -14,14 +14,6 @@ image: ""
 ### 安装Git
 [参考文档](https://git-scm.cn/learn)
 
-安装Git
-Linux： 
-```
-sudo apt install git-all
-```
-Windows：浏览器搜索git去官网，或者使用国内镜像
-[链接](https://git-scm.cn/install/windows)
-
 安装无脑下一步就可以，安装完成后就可以去终端查看是否安装成功
 ```
 git --version
@@ -29,16 +21,15 @@ git --version
 当然也有 help和list等常用指令
 
 #### 初次运行Git前的配置
-*这里实际遇到问题都是找AI，实际没接触到，日后可能会使用到还是记录一下*
 
-#### 你的身份
+#### 设置身份
 
 安装完 Git 后，首先要做的事情是设置你的用户名和邮件地址。就是告诉Git你是谁。
 ```
 git config --global user.name "John Doe"
 git config --global user.email johndoe@example.com
 ```
-更改编辑器，可选，如果喜欢用其他的编辑气的话
+更改编辑器，可选，如果喜欢用其他的编辑器的话
 ```
 git config --global core.editor emacs
 ```
@@ -62,14 +53,6 @@ git init
 ##### 更改默认分支
 当你使用 git init 创建新仓库时，Git 会创建一个名为 master 的分支。
 git init的作用是在当前文件夹内生成一个.git隐藏文件，里面包含所有版本控制元数据。
-
-*大树的枝干（什么是分支，这是ai的解释，类似于Word的历史版本，但要强大的多）*
-
-*主干（Main）：是这棵树的命脉，必须保持绝对稳定。*
-
-*侧枝（Feature）：是从主干上长出来的新枝条。它可以在外面自由生长（添新叶子=写新代码），哪怕被风吹断了（代码写崩了），也不会让整棵树枯死。*
-
-*嫁接（Merge）：当这根侧枝长结实了（测试通过），园丁就把它嫁接回主干上，让它成为主干的一部分。*
 
 将main设置为默认分支
 ```
@@ -98,7 +81,6 @@ git add 可以用来开始追踪新文件、暂存文件、以及其他功能。
 
 如```git add README```
 
-再次查看状态会显示
 
 #### 提交更改
 
