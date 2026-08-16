@@ -1,7 +1,7 @@
 ---
 description: ""
 title: "长期记忆"
-draft: true
+draft: false
 date: "2026-08-16T01:03:01+08:00"
 slug: "long-memory"
 categories:
@@ -68,6 +68,58 @@ Chroma 会把这个数字指纹和原文一起写进你本地的 ./mem_store/ �
 add_fact = RAG 里的"写入/索引"（chunk + embed + store）
 recall = RAG 里的"检索"（query embed + similarity search）
 PersistentClient(path=...) = 让向量库落到磁盘，不是内存版
+
+
+```
+'''
+长期记忆学习文档
+长期记忆 = 关电脑也不丢
+长期记忆 = 单文档 RAG + 落盘
+    嵌入/相似度召回  → 只是把"文档"换成"用户事实"且持久化
+pip install chromadb
+'''
+import chromadb
+from pathlib import Path
+
+BASE=Path(__file__).parent
+
+class LongTermMemory:
+    def __init__(self,path=str(BASE/"mem_store"),collection="long_term"):
+        self.client=chromadb.PersistentClient(path=path) #建客户端(连上本地存储)
+        self.col=self.client.get_or_create_collection(collection)# 拿货架(没有就建)
+
+    def add_fact(self,text:str,fid:str): #Chroma 的 add 要求每个参数都是列表（ids=[...]、documents=[...]）——因为 Chroma 的 add 支持批量加。就算你只存一条，也要写成 [fid]、[text]
+        self.col.add(ids=[fid],documents=[text])
+
+    def recall(self,query:str,k:int=3)->list[str]:
+        res=self.col.query(query_texts=[query],n_results=k)
+        return res["documents"][0] if res["documents"] else []
+
+    def delete(self,fid:str):
+        self.col.delete(ids=[fid])
+```
+```
+import sqlite3, json
+from pathlib import Path
+BASE = Path(__file__).parent
+
+class ProfileStore:
+    def __init__(self,db_path=str(BASE / "memory.db")):
+        self.con=sqlite3.connect(db_path)
+        self.con.execute("CREATE TABLE IF NOT EXISTS profile (k TEXT PRIMARY KEY, v TEXT)")
+        self.con.commit()
+
+    def set_profile(self, k, v):
+        self.con.execute("INSERT OR REPLACE INTO profile VALUES(?,?)",(k,json.dumps(v)))
+
+    def get_profile(self,k):
+        row=self.con.execute("SELECT v FROM profile WHERE k=?",(k,)).fetchone()
+        return json.loads(row[0]) if row else None
+
+    
+```
+
+
 
 
 
