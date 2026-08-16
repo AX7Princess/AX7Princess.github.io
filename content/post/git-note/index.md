@@ -1,18 +1,20 @@
 ---
 description: ""
 title: "Git学习笔记"
-draft: true
+draft: false
 date: "2026-07-03T07:50:31+08:00"
 slug: "git note"
 categories:
  - null
 tags:
- - null
+ - Note
 image: ""
 ---
 
 # Git 命令指南
+
 ## 目录
+
 - [一、配置与初始化](#一配置与初始化)
 - [二、日常提交四步曲](#二日常提交四步曲)
 - [三、查看状态与差异](#三查看状态与差异)
@@ -279,6 +281,96 @@ git switch -c hotfix
 git switch main
 git merge hotfix
 git stash pop
+```
+
+## 十一、回退到历史某个版本
+
+代码上线后出问题、或误提交了错误内容时，需要让仓库回到某个旧提交。
+
+### 方式一：reset 回退（本地、未推送时推荐）
+```bash
+git log --oneline             # 找到目标 commit 的 id
+git reset --hard <commit-id>  # 工作区/暂存区/版本库全部回到该版本
+git reset --hard HEAD~3       # 回退最近 3 个提交
+```
+> ⚠️ `--hard` 会丢弃目标版本之后的所有改动，仅在未推送且确定不要时用。
+
+### 方式二：revert 回退（已推送到远程时推荐）
+```bash
+git revert <commit-id>          # 生成一个反向提交，抵消该次改动
+git revert HEAD~2..HEAD         # 批量撤销最近 2 个提交
+```
+不改写历史，对团队协作安全，之后 `git push` 即可。
+
+### 方式三：临时查看旧版本（不改动当前状态）
+```bash
+git checkout <commit-id>        # 进入 detached HEAD 查看旧代码
+git switch -                    # 看完切回原分支
+```
+
+### 回退后强制同步远程
+本地 `reset --hard` 回退后若已推送过，需强推（会覆盖远程历史，谨慎）：
+```bash
+git push --force-with-lease origin main
+```
+优先用 `--force-with-lease`，比 `--force` 安全：远程有他人新提交时会拒绝，避免误覆盖别人的工作。
+
+### 误删提交找回
+```bash
+git reflog                     # 查看 HEAD 移动记录，定位丢失的 commit id
+git reset --hard <commit-id>   # 恢复
+```
+
+## 十二、远程仓库连接与认证管理
+
+### 修改远程仓库地址（改名 / 换平台 / 换账号）
+```bash
+git remote -v                                          # 查看当前关联
+git remote set-url origin https://github.com/新用户名/新仓库名.git
+git remote -v                                          # 确认已更新
+```
+GitHub 改了仓库名或用户名后 URL 随之变化，用 `set-url` 重新指向即可，**本地提交历史全部保留，无需重新 clone**。
+
+### 远程仓库“名字变了”重新连接
+仓库名变了本质是远程 URL 变了，处理方法同上：
+```bash
+git remote set-url origin <新地址>
+```
+想顺便改本地 remote 的简称（如 `origin` → `github`）：
+```bash
+git remote rename origin github
+```
+
+### HTTPS 与 SSH 互转
+```bash
+# HTTPS → SSH
+git remote set-url origin git@github.com:用户名/仓库名.git
+
+# SSH → HTTPS
+git remote set-url origin https://github.com/用户名/仓库名.git
+```
+- **HTTPS**：每次 push 用个人访问令牌（PAT）或系统凭据管理器认证，最省心
+- **SSH**：用本机 SSH 密钥认证，配好后无需每次输密码，适合自动化/脚本
+
+### 生成并配置 SSH 密钥
+```bash
+ssh-keygen -t ed25519 -C "you@example.com"   # 生成密钥对，一路回车
+cat ~/.ssh/id_ed25519.pub                     # 复制公钥内容
+# 到 GitHub → Settings → SSH and GPG keys 粘贴添加
+ssh -T git@github.com                         # 测试连接，看到成功提示即可
+```
+
+### 更换 / 更新 HTTPS 凭据（令牌）
+- **Windows**：控制面板 → 凭据管理器 → Windows 凭据 → 找到 `git:https://github.com` → 编辑或删除，下次 push 重新输入
+- **命令行清除后重输**：
+```bash
+git credential-manager reject https://github.com
+```
+
+### 验证当前连接方式
+```bash
+git remote -v                  # URL 是 https:// 还是 git@ 一目了然
+ssh -T git@github.com         # 单独验证 SSH 是否连通
 ```
 
 ---
