@@ -11,7 +11,7 @@ tags:
 image: ""
 ---
 
-# Git 命令指南
+# Git 命令完全指南：从入门到日常够用的所有指令
 
 ## 目录
 
@@ -371,6 +371,59 @@ git credential-manager reject https://github.com
 ```bash
 git remote -v                  # URL 是 https:// 还是 git@ 一目了然
 ssh -T git@github.com         # 单独验证 SSH 是否连通
+```
+
+## 十三、查看与修改 .gitignore 文件
+
+`.gitignore` 决定哪些文件不进版本库。下面是如何查看它、修改它，以及处理"加了规则却没生效"的常见坑。
+
+### 查看 .gitignore
+```bash
+cat .gitignore                   # 直接查看文件内容
+code .gitignore                  # 用编辑器打开（VS Code）
+git status --ignored             # 查看当前被忽略的文件列表
+```
+
+### 检查某个文件是否被忽略、被哪条规则命中
+```bash
+git check-ignore -v node_modules   # 显示匹配的规则及其所在行
+git check-ignore .env              # 有输出 = 被忽略；无输出 = 未被忽略
+```
+`-v`（verbose）会告诉你具体是哪一行规则、来自哪个 `.gitignore` 文件，调试"为什么这个文件没被忽略"时极有用。
+
+### 修改 .gitignore
+```bash
+# 方式一：直接编辑文件（记事本 / VS Code / vim）
+# 方式二：命令行追加一条规则
+echo "*.log" >> .gitignore
+echo ".env"  >> .gitignore
+```
+常见规则写法：
+```gitignore
+.env                  # 忽略名为 .env 的文件
+.env.*                # 忽略 .env.local 等变体
+*.log                 # 忽略所有 .log
+node_modules/         # 忽略目录
+/build                # 忽略根目录下的 build
+```
+
+### 关键坑：文件已被跟踪，加了规则也不生效
+如果某文件（如 `.env`）之前已经被 commit 进版本库，后来才加进 `.gitignore`，Git 仍会继续跟踪它。需要先从版本库移除跟踪（**本地文件会保留**）：
+```bash
+git rm --cached .env          # 从版本库/暂存区移除，但保留本地文件
+git commit -m "stop tracking .env"
+```
+之后 `.gitignore` 才会真正生效，该文件不再被提交推送。
+
+### 强制添加被忽略的文件（临时）
+```bash
+git add -f important.log      # -f 强制添加，即使被 .gitignore 忽略
+```
+
+### 全局忽略（对所有仓库生效）
+```bash
+git config --global core.excludesfile ~/.gitignore_global
+# 之后编辑 ~/.gitignore_global 写入规则，对当前用户所有仓库生效
 ```
 
 ---
