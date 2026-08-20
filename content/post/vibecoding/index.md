@@ -1,7 +1,7 @@
 ---
 description: ""
 title: "如何开始vibcoding"
-draft: true
+draft: false
 date: "2026-08-20T13:04:51+08:00"
 slug: "vibecoding"
 categories:
@@ -782,6 +782,3 @@ git checkout <上一个好tag>        # 本地回退
 
 ---
 
-> 版本：V1.5（操作透明日志版）
-> V1.4 → V1.5：阶段零新增「其二 操作透明日志」纪律——每次操作（改了什么文件/哪段/为什么/结果）立即写进本地 `OPERATIONS.md`，AI 操作完全透明、禁止黑盒；含可直接抄的日志格式模板 + 写进 AI 红线的规则 6/7（每次操作汇报并写日志、日志文件也 commit）；阶段零交付清单、AI 红线、阶段二/三/四 Git 提醒、总览贯穿句、陷阱表均补「写日志」要求；阶段零硬门槛扩展为「没建仓库 / 没建日志纪律不准写码」。
-> 后续可迭代：补真实项目案例、补工具链对比（Cursor / Claude Code / Lovable）、补「Vibe & Verify」进阶实践。
